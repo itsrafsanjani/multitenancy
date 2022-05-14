@@ -21,4 +21,14 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-require __DIR__.'/auth.php';
+Route::get('/settings', function () {
+    $tenant = tenant('id', 'data');
+    return $tenant;
+    return view('settings', compact('tenant'));
+})->middleware(['auth'])->name('settings');
+
+Route::post('/settings', function () {
+    return view('settings');
+})->middleware(['auth'])->name('settings.store');
+
+require __DIR__ . '/auth.php';

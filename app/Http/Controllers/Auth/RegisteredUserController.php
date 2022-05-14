@@ -74,6 +74,17 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        // Let's say we want to be redirected to the dashboard
+        // after we're logged in as the impersonated user.
+        $redirectUrl = '/dashboard';
+
+        $token = tenancy()->impersonate($tenant, $user->id, $redirectUrl);
+
+        // Note: This is not part of the package, it's up to you to implement
+        // a concept of "primary domains" if you need them. Or maybe you use
+        // one domain per tenant. The package lets you do anything you want.
+        return redirect('http://' . $domain->domain . '.' . config('tenancy.central_domains')[0] . '/impersonate/' . $token->token);
+
+        // return redirect(RouteServiceProvider::HOME);
     }
 }
